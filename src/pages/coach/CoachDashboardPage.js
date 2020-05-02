@@ -138,8 +138,8 @@ class CoachDashboardPage extends Component {
 
 const condition = authUser => authUser && !!authUser.role=="COACH";
 
-export default compose(
-  withAuthorization(condition),
-  withFirebase,
-)(CoachDashboardPage);
-// export default CoachDashboardPage;
+// export default compose(
+//   withAuthorization(condition),
+//   withFirebase,
+// )(CoachDashboardPage);
+export default CoachDashboardPage;
