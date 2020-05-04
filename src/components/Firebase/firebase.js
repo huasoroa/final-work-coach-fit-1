@@ -63,10 +63,20 @@ class Firebase {
   user = uid => this.database.ref(`users/${uid}`);
   users = () => this.database.ref('users');
 
+  // *** Booking API ***
+
+  booking = uid => this.database.ref(`booking/${uid}`)
+  bookings = () => this.database.ref('booking')
+  bookingMember = uid => this.database.ref(`bookingMembers/${uid}`)
+  bookingMembers = () => this.database.ref('bookingMembers')
+
 
   // *** Chatting API ***
-  doAddMessage = (conversationId,senderId, message, timeStamp) =>
-  this.database.ref('Messaging/'+conversationId).set({})
+  chat = uid => this.database.ref(`chats/${uid}`)
+  chats = () => this.database.ref('chats')
+  chatMember = () => this.database.ref('chatMembers')
+  chatMembers = uid => this.database.ref(`chatMembers/${uid}`)
+  messages = uid => this.database.ref(`chatMessages/${uid}`)
 }
 
  

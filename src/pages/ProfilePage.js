@@ -23,8 +23,8 @@ export default class ProfilePage extends Component {
                         </Card>
                     </Col>
                     <Col>
-                    <Card inverse className="bg-gradient-theme">
-                    <CardBody className="d-flex justify-content-center align-items-center flex-column">
+                    <Card>
+                    <CardBody>
                             <ListGroup>
                                 <ListGroupItem>Age: </ListGroupItem>
                             </ListGroup>

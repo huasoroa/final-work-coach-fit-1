@@ -52,7 +52,8 @@ class CoachList extends Component {
                             text={user.description}
                             >
                             <CardBody>
-                                    <Link to={"/client/booking/item/"+user.uid}>Book</Link>
+                                    <Link to={"/client/booking/book/"+user.uid}>Book</Link>
+                                    <Link to={"/client/booking/profile/"+user.uid}>More</Link>
                             </CardBody>
                         </UserCard>
                     </Col>
