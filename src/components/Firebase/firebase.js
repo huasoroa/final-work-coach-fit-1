@@ -1,6 +1,7 @@
 import app from 'firebase/app';
 import 'firebase/auth'
 import 'firebase/database'
+import 'firebase/storage'
 const config = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -14,6 +15,7 @@ class Firebase {
     app.initializeApp(config);
     this.auth = app.auth();
     this.database = app.database();
+    this.storage = app.storage();
   }
   // *** Auth API ***
   doCreateUserWithEmailAndPassword = (email, password) =>
@@ -64,12 +66,14 @@ class Firebase {
   users = () => this.database.ref('users');
 
   // *** Booking API ***
-
   booking = uid => this.database.ref(`booking/${uid}`)
   bookings = () => this.database.ref('booking')
   bookingMember = uid => this.database.ref(`bookingMembers/${uid}`)
   bookingMembers = () => this.database.ref('bookingMembers')
 
+  // *** Reviews API ***
+  review = uid => this.database.ref(`reviews/${uid}`)
+  reviews = () => this.database.ref('reviews')
 
   // *** Chatting API ***
   chat = uid => this.database.ref(`chats/${uid}`)
@@ -77,6 +81,11 @@ class Firebase {
   chatMember = () => this.database.ref('chatMembers')
   chatMembers = uid => this.database.ref(`chatMembers/${uid}`)
   messages = uid => this.database.ref(`chatMessages/${uid}`)
+
+  // *** Profile Pictures API ***
+  profilePic = uid => this.storage.ref(`profile/${uid}`)
+  profilePics = () => this.storage.ref(`profile/`)
+
 }
 
  

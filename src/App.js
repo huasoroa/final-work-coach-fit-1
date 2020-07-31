@@ -83,12 +83,12 @@ class App extends React.Component {
                 <Route exact path="/forms" component={FormPage} />
                 <Route exact path="/input-groups" component={InputGroupPage} />
                 <Route exact path="/charts" component={ChartPage} />
-                <Route exact path="/coach/dashboard" component={props => (<CoachDashboardPage {...props}/>)} />
+                <Route exact path="/coach/dashboard" component={withFirebase(CoachDashboardPage)} />
                 <Route exact path='/messaging' component={MessagingPage}/>
                 <Route exact path='/client/booking' component={withFirebase(CoachList)}/>
                 <Route exact path='/client/booking/profile/:id' component={withFirebase(CoachItem)}/>
-                <Route exact path='/client/booking/book/:id' component={BookingPage} />
-                <Route exact path='/profile' component={ProfilePage} />
+                <Route exact path='/client/booking/book/:id' component={withFirebase(BookingPage)} />
+                <Route exact path='/profile/:id' component={withFirebase(ProfilePage)} />
               </React.Suspense>
             </MainLayout>
             <Redirect to="/" />

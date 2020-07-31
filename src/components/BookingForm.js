@@ -11,47 +11,54 @@ export default class BookingForm extends Component {
 
     handleSubmit = event => {
         const {date, startTime, endTime} = this.state
-        var newBooking = this.props.firebase.bookings.push({
+        var newBooking = this.props.firebase.bookings().push({
             date,
             startTime,
             endTime,
         });
 
         const bookingId= newBooking.key;
-
-        const authUser = localStorage.getItem('authUser');
-        const data = {
-            [authUser.uid]:true,
-            [this.props.coachId]:true,
-        }
+        const authUser = JSON.parse(localStorage.getItem('authUser'));
+        console.log('authUser: '+authUser)
+        const {uid} = authUser;
+        const coachId = this.props.coachId;
         this.props.firebase.bookingMember(bookingId).set({
-             
+            [uid]:true,
+            [coachId]:true,
         })
     }
+
+    onChange = event => {
+        this.setState({ [event.target.name]: event.target.value });
+        console.log(event.target.name+': '+event.target.value)
+      };
 
     render() {
         return (
             <Form>
                 <FormGroup>
-                    <Label for='Date'>Date</Label>
+                    <Label for='date'>Date</Label>
                     <Input 
                         type='date'
-                        name='Date'
-                        id='Date'/>
+                        name='date'
+                        id='date'
+                        onChange={this.onChange}/>
                 </FormGroup>
                 <FormGroup>
                     <Label for='startTime'>Start at</Label>
                     <Input
                         type='time'
                         name='startTime'
-                        id='startTime' />
+                        id='startTime'
+                        onChange={this.onChange} />
                 </FormGroup>
                 <FormGroup>
                 <Label for='endTime'>End at</Label>
                     <Input
                         type='time'
                         name='endTime'
-                        id='endTime' />
+                        id='endTime'
+                        onChange={this.onChange} />
                 </FormGroup>
                 <Button onClick={this.handleSubmit}>Book</Button>
             </Form>

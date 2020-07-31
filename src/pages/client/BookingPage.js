@@ -3,15 +3,16 @@ import PropTypes from 'prop-types'
 import Page from 'components/Page'
 import {withFirebase} from 'components/Firebase'
 import { Route , Switch } from 'react-router-dom'
-import {Row , Col} from 'reactstrap'
+import {Row , Col, ListGroup, ListGroupItem} from 'reactstrap'
 import { UserCard } from 'components/Card'
 import BookingForm from 'components/BookingForm'
 
-
+const BookingFormComp = withFirebase(BookingForm)
 class BookingPage extends Component {
 
     state = {
         user: null,
+        reviews: null,
         loading: true,
     }
 
@@ -19,15 +20,23 @@ class BookingPage extends Component {
         this.setState({ loading: true });
         this.props.firebase.user(this.props.match.params.id).on('value', snapshot => {
           const usersObject = snapshot.val();
+          const usersDone = {uid: this.props.match.params.id,
+                            ...usersObject}
           this.setState({
-            user: usersObject,
-            loading: false,
+            user: usersDone,
           });
         });
+        this.props.firebase.reviews(this.props.match.params.id).on('value', snapshot => {
+            const reviewsObject = snapshot.val()
+            this.setState({
+                reviews: reviewsObject,
+                loading: false
+            })
+        })
     }
 
     render() {
-        const {user, loading} = this.state
+        const {user, loading, reviews} = this.state
         return (
             <Page>
                 {loading && <div>Loading</div>}
@@ -46,10 +55,29 @@ class BookingPage extends Component {
                             </UserCard>
                         </Col>
                         <Col lg={6} md={6} sm={12}>
-                            <BookingForm coachId={user.uid}/>
+                            <BookingFormComp coachId={user.uid}/>
                         </Col>
                     </Row>
                 )}
+                    {reviews && (
+                        <Row>
+                            <ListGroup>
+                                {reviews.map(review =>(
+                                    <ListGroupItem>
+                                        <ListGroup>
+                                            <ListGroupItem>
+                                                Author: {review.author}
+                                            </ListGroupItem>
+                                            <ListGroupItem>
+                                                Text : {review.text}
+                                            </ListGroupItem>
+                                        </ListGroup>
+                                    </ListGroupItem>
+                                )
+                                )}
+                            </ListGroup>
+                        </Row>
+                    )}
                 </Page>
         )
     }

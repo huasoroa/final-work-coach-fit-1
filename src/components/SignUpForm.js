@@ -117,6 +117,7 @@ class SignUpForm extends React.Component {
           <FormGroup>
             <Label for={roleLabel}>{roleLabel}</Label>
             <Input {...roleInputProps} onChange = {this.onChange} value = {role}>
+              <option>-</option>
               <option>{ROLES.CLIENT}</option>
               <option>{ROLES.COACH}</option>
             </Input>

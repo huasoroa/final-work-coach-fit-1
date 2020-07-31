@@ -1,27 +1,52 @@
 import React, { Component } from 'react'
-import { MessageBox, MessageList, Input, SystemMessage } from 'react-chat-elements'
+import Typography from 'components/Typography'
+import {ChatFeed} from 'react-bell-chat'
 import Page from 'components/Page'
-
+import { FormGroup, Form, Label, Input, Button, Row } from 'reactstrap'
 
 export default class MessagingPage extends Component {
 
     state = {
         messageList:[{
-            // id: 1,
-            position: 'left',
+            id: 1,
             type: 'text',
-            text: 'Testing text first',
-            date: new Date(),
-            // author: 1 //user uid
+            message: 'Testing text first',
+            createdOn: new Date(),
+            authorId: '1' //user uid
         },
         {
-            // id: 2,
-            position: 'right',
+            id: 2,
             type: 'text',
-            text:'Testing second text',
-            date: new Date(),
-            // author: 2,
-        },]
+            message:'Testing second text',
+            createdOn: new Date(),
+            authorId: '2',
+        },
+        {
+            id: 3,
+            type: 'text',
+            message:'Testing third text',
+            createdOn: new Date(),
+            authorId: '3',
+        },
+    ],
+        authors:[
+            {
+                id: '1',
+                name: 'John',
+                avatarName: 'John',
+            },
+            {
+                id: '2',
+                name: 'Maria',
+                avatarName: 'Maria',
+            },
+            {
+                id: '3',
+                name: 'Filip',
+                avatarName: 'Filip',
+            },
+            
+        ]
     }
     
     /*
@@ -37,14 +62,33 @@ export default class MessagingPage extends Component {
         
     }
 
+    renderMessages() {
+        const {messageList} = this.state
+        return(
+            <div>
+                {messageList.map(msg => (
+                    <div>
+
+                    </div>
+                ))}
+            </div>
+        )
+    }
     render() {
         return (
-            <div>
-                <MessageList
-                        className='message-list'
-                        lockable={true}
-                        dataSource={this.state.messageList} />
-            </div>
+            <Page>
+                <ChatFeed
+                    messages={this.state.messageList}
+                    authors={this.state.authors}
+                    yourAuthorId={'2'}
+                    showRecipientAvatar={true}
+                />
+                <Input 
+                    type='text'
+                    id='text'
+                    name='message'
+                />
+            </Page>
         )
     }
 }

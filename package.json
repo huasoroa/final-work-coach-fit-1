@@ -4,6 +4,9 @@
   "private": false,
   "homepage": "https://reduction-admin.github.io/react-reduction",
   "dependencies": {
+    "@material-ui/core": "^4.10.2",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "bootstrap": "4.3.1",
     "chart.js": "2.7.2",
     "classnames": "^2.2.6",
@@ -15,6 +18,7 @@
     "react-bell-chat": "^1.0.23",
     "react-chartjs-2": "^2.7.4",
     "react-chat-elements": "^10.8.0",
+    "react-chat-widget": "^3.0.2",
     "react-component-queries": "^2.3.0",
     "react-d3-map": "^0.8.3",
     "react-dom": "^16.8.4",

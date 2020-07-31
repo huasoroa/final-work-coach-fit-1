@@ -25,7 +25,6 @@ export default class CoachItem extends Component {
       this.props.firebase.user(this.props.match.params.id).off();
     }
     render() {
-        console.log("TEST PARAMS: "+this.props.match.params.id)
         const {user, loading} = this.state
         return(
             <Page>

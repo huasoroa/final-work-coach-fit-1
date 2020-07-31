@@ -42,6 +42,12 @@ const sidebarBackground = {
   backgroundRepeat: 'no-repeat',
 };
 
+const navCoachFit = [
+  { to: '/coach/dashboard', name : 'dashboard', exact: false,}
+]
+const navClientFit = [
+  { to: '/client/booking', name : 'booking', exact : false,} 
+]
 const navComponents = [
   { to: '/buttons', name: 'buttons', exact: false, Icon: MdRadioButtonChecked },
   {
@@ -125,6 +131,36 @@ class Sidebar extends React.Component {
             </SourceLink>
           </Navbar>
           <Nav vertical>
+          {navCoachFit.map(({ to, name, exact }, index) => (
+              <NavItem key={index} className={bem.e('nav-item')}>
+              <BSNavLink
+                id={`navItem-${name}-${index}`}
+                className="text-uppercase"
+                tag={NavLink}
+                to={to}
+                activeClassName="active"
+                exact={exact}
+              >
+                {/* <Icon className={bem.e('nav-item-icon')} /> */}
+                <span className="">{name}</span>
+              </BSNavLink>
+            </NavItem>
+            ))}
+            {navClientFit.map(({ to, name, exact }, index) => (
+              <NavItem key={index} className={bem.e('nav-item')}>
+              <BSNavLink
+                id={`navItem-${name}-${index}`}
+                className="text-uppercase"
+                tag={NavLink}
+                to={to}
+                activeClassName="active"
+                exact={exact}
+              >
+                {/* <Icon className={bem.e('nav-item-icon')} /> */}
+                <span className="">{name}</span>
+              </BSNavLink>
+            </NavItem>
+            ))}
             {navItems.map(({ to, name, exact, Icon }, index) => (
               <NavItem key={index} className={bem.e('nav-item')}>
                 <BSNavLink
