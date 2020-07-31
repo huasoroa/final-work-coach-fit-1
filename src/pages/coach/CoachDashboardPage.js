@@ -56,13 +56,14 @@ class CoachDashboardPage extends Component {
           })
         })
         this.setState({bookings: formatBookingList})
+           
+    
+        this.setState({loading:false})
       } else {
         this.setState({loading : false})
       }
     })
-     
-    
-    this.setState({loading:false})
+  
   }
 
     render() {
