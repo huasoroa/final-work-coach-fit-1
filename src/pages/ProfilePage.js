@@ -52,6 +52,7 @@ export default class ProfilePage extends Component {
 
         this.props.firebase.review(this.props.match.params.id).on('value', snapshot => {
             const reviewsSnap = snapshot.val();
+            if(reviewsSnap!==null)
             this.setState({reviews : reviewsSnap})
         })
 
@@ -110,13 +111,13 @@ export default class ProfilePage extends Component {
                             <Col lg={9} sm={6} md={9}>
                                 
                                 <ListGroup>
-                                    {reviews && reviews.map(rev => (
+                                    {reviews===null?(<div>No Reviews Available</div>):(reviews.map(rev => (
                                         <ListGroupItem>
-                                            <Typography type='h4'>{rev.author}</Typography>
+                                            <Typography type='h4'>{rev.rating}</Typography>
                                             <br />
-                                            {rev.text}
+                                            {rev.comment}
                                         </ListGroupItem>
-                                    ))}
+                                    )))}
                                 </ListGroup>
                             </Col>
                         </Row>

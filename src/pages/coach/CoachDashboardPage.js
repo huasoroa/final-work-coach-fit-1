@@ -8,14 +8,18 @@ import {withFirebase} from 'components/Firebase'
 import {UserCard} from 'components/Card'
 import PropTypes from 'utils/propTypes';
 import classNames from 'classnames';
-import { Col, Row, Card, CardTitle, CardSubtitle, CardText, CardBody } from 'reactstrap';
+import { Col, Row, Card, CardTitle, CardSubtitle, CardText, CardBody, ListGroup, ListGroupItem } from 'reactstrap';
 import Avatar from 'components/Avatar';
 
 class CoachDashboardPage extends Component {
 
   state = {
-    bookings : null,
+    bookings : [],
     loading: false,
+  }
+
+  userAdapter = () => {
+
   }
 
   componentDidMount = () => {
@@ -25,39 +29,53 @@ class CoachDashboardPage extends Component {
     .orderByChild(authUser.uid).equalTo(true).on('value',snapshot => {
       const bookingObjects = snapshot.val();
       if (bookingObjects!== null) {
-        let members = []
-        let uids= []
-        let bookingList = null;
-        Object.keys(bookingObjects).forEach(key => {
-          Object.keys(bookingObjects[key]).map(mKey => {
-            members.push(mKey);
-            console.log('mKey: '+mKey)
-          }) 
-          console.log('key: '+key)
-          uids.push(key)
-        });
-        console.log('Booking')
-        console.log(bookingList)
-        let formatBookingList=[];
-        uids.forEach(obj => {
-          this.props.firebase.booking(obj).on('value', snapshot => {
-            const bookingData= snapshot.val();
-            console.log(bookingData);
-            formatBookingList.push(bookingData);
-          })
-        });
-        console.log("FormatBookingList == ")
-        console.log(formatBookingList)
-        let membersList = []
-        members.forEach(obj => {
-          this.props.firebase.user(obj).on('value', snaphot => {
-            const user = snapshot.val()
-            membersList.push(user)
-          })
-        })
-        this.setState({bookings: formatBookingList})
-           
+        console.log("For ... in Loop")
+        for (const key in bookingObjects) {
+          if (bookingObjects.hasOwnProperty(key)) {
+
+            const membersUid = bookingObjects[key];
+
+            let membersInformation = []
+            this.props.firebase.booking(key).on('value', snapshot => {
+              const bookingMetadata = snapshot.val();
+              let timeNow = new Date()
+              console.log(bookingMetadata);
+              const bookingTime = new Date(bookingMetadata.date)
+              console.log(bookingTime)
+              if (bookingTime.getTime() > timeNow.getTime() || this.state.bookings.length > 4 ) {
+                console.log('It got through Bruv')
+                for (const uid in membersUid) {
+                  if (membersUid.hasOwnProperty(uid)) {
+                    const element = membersUid[uid];
     
+                    this.props.firebase.user(uid).on('value',snapshot => {
+                      const userObject = snapshot.val();
+                      const userAdapter = { firstName : userObject.firstName,
+                                            lastName : userObject.lastName,
+                                            username : userObject.username,
+                        }
+                        membersInformation.push(userAdapter)
+                    })
+    
+                  }
+                }
+                const bookingAdapter = {date : bookingMetadata.date,
+                                        startTime: bookingMetadata.startTime,
+                                        endTime: bookingMetadata.endTime,
+                }
+                const bookingObject = { membersInformation,
+                                        bookingInformation: bookingAdapter            
+                }
+                console.log(bookingObject)
+                this.setState(prevState => ({
+                  bookings : [...prevState.bookings, bookingObject]
+                }))
+              }
+            })
+
+          }
+        }
+        console.log("End For .... in Loop")
         this.setState({loading:false})
       } else {
         this.setState({loading : false})
@@ -65,10 +83,14 @@ class CoachDashboardPage extends Component {
     })
   
   }
+  componentWillUnmount=() => {
+    this.props.firebase.users().off()
+    this.props.firebase.bookings().off()
+    this.props.firebase.bookingMembers().off()
+  }
 
     render() {
       const {bookings, loading}=this.state
-      
       
         return (
             <Page className="DashboardPage"
@@ -129,23 +151,29 @@ class CoachDashboardPage extends Component {
           </Col>
         </Row>
           {loading && (<div>Loading ...</div>)}
-          {bookings===null?(<div>No bookings Available</div>):( 
+          {!bookings.length?(<div>No bookings Available</div>):( 
             <Row>
               {bookings.map(booking => (
-                <Col>
+                <Col lg={3} md= {6} sm={6} xs={12}>
                   <Card>
                     <CardBody>
-                      <CardText>
-                        Date {booking.date},
-                        Start {booking.startTime},
-                        End {booking.endTime}
-                      </CardText>
+                        <ListGroup>
+                          <ListGroupItem>Date {booking.bookingInformation.date}</ListGroupItem>
+                          <ListGroupItem>Start {booking.bookingInformation.startTime}</ListGroupItem>
+                          <ListGroupItem>End {booking.bookingInformation.endTime}</ListGroupItem>
+                        </ListGroup>
+                        {booking.membersInformation.map(user => (
+                          <ListGroup>
+                            <ListGroupItem>First name : {user.firstName}</ListGroupItem>
+                            <ListGroupItem>Last name : {user.lastName}</ListGroupItem>
+                            <ListGroupItem>Username : {user.username}</ListGroupItem>
+                          </ListGroup>
+                        ))}
                     </CardBody>
                   </Card>
                 </Col>
               ))}
             </Row>
-
           )}
 
 
@@ -154,10 +182,10 @@ class CoachDashboardPage extends Component {
     }
 }
 
-const condition = authUser => authUser && !!authUser.role=="COACH";
+const condition = authUser => authUser && !!authUser.role==="COACH";
 
 // export default compose(
 //   withAuthorization(condition),
 //   withFirebase,
 // )(CoachDashboardPage);
-export default CoachDashboardPage;
+export default withFirebase(CoachDashboardPage);

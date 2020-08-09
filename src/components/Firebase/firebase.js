@@ -71,7 +71,8 @@ class Firebase {
   bookingMember = uid => this.database.ref(`bookingMembers/${uid}`)
   bookingMembers = () => this.database.ref('bookingMembers')
 
-  // *** Reviews API ***
+  // *** Reviews API *** 
+  // Reviews stored by Coach UID
   review = uid => this.database.ref(`reviews/${uid}`)
   reviews = () => this.database.ref('reviews')
 

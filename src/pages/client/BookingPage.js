@@ -28,10 +28,12 @@ class BookingPage extends Component {
         });
         this.props.firebase.reviews(this.props.match.params.id).on('value', snapshot => {
             const reviewsObject = snapshot.val()
+            if (reviewsObject!==null)
+            {
             this.setState({
                 reviews: reviewsObject,
                 loading: false
-            })
+            })}
         })
     }
 
@@ -59,17 +61,17 @@ class BookingPage extends Component {
                         </Col>
                     </Row>
                 )}
-                    {reviews && (
+                    {/* {reviews && (
                         <Row>
                             <ListGroup>
                                 {reviews.map(review =>(
                                     <ListGroupItem>
                                         <ListGroup>
                                             <ListGroupItem>
-                                                Author: {review.author}
+                                                Rating: {review.rating}/10
                                             </ListGroupItem>
                                             <ListGroupItem>
-                                                Text : {review.text}
+                                                Comment : {review.text}
                                             </ListGroupItem>
                                         </ListGroup>
                                     </ListGroupItem>
@@ -77,7 +79,7 @@ class BookingPage extends Component {
                                 )}
                             </ListGroup>
                         </Row>
-                    )}
+                    )} */}
                 </Page>
         )
     }
