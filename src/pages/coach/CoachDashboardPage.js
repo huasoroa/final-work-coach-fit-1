@@ -18,9 +18,6 @@ class CoachDashboardPage extends Component {
     loading: false,
   }
 
-  userAdapter = () => {
-
-  }
 
   componentDidMount = () => {
     this.setState({loading:true})
@@ -156,9 +153,9 @@ class CoachDashboardPage extends Component {
               {bookings.map(booking => (
                 <Col lg={3} md= {6} sm={6} xs={12}>
                   <Card>
+                    <CardTitle>{booking.bookingInformation.date}</CardTitle>
                     <CardBody>
                         <ListGroup>
-                          <ListGroupItem>Date {booking.bookingInformation.date}</ListGroupItem>
                           <ListGroupItem>Start {booking.bookingInformation.startTime}</ListGroupItem>
                           <ListGroupItem>End {booking.bookingInformation.endTime}</ListGroupItem>
                         </ListGroup>

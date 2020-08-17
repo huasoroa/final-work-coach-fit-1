@@ -15,6 +15,7 @@ import CoachList from './components/CoachList';
 import {withFirebase} from 'components/Firebase'
 import CoachItem from './components/CoachItem';
 import ProfilePage from 'pages/ProfilePage'
+import ProfileEditPage from './pages/ProfileEditPage';
 
 const AlertPage = React.lazy(() => import('pages/AlertPage'));
 const AuthModalPage = React.lazy(() => import('pages/AuthModalPage'));
@@ -89,6 +90,7 @@ class App extends React.Component {
                 <Route exact path='/client/booking/profile/:id' component={withFirebase(CoachItem)}/>
                 <Route exact path='/client/booking/book/:id' component={withFirebase(BookingPage)} />
                 <Route exact path='/profile/:id' component={withFirebase(ProfilePage)} />
+                <Route exact path='/profile/edit/:id' component={withFirebase(ProfileEditPage)}/>
               </React.Suspense>
             </MainLayout>
             <Redirect to="/" />

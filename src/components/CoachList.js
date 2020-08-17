@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import UserCard from 'components/Card/UserCard'
-import { Col, CardBody, CardLink, Row} from 'reactstrap'
+import { Col, CardBody, CardLink, Row, Button} from 'reactstrap'
 import Page from 'components/Page'
 import {Link} from 'react-router-dom'
 
@@ -52,8 +52,12 @@ class CoachList extends Component {
                             text={user.description}
                             >
                             <CardBody>
+                                    <Button className="btn-warning float-left">
                                     <Link to={"/client/booking/book/"+user.uid}>Book</Link>
+                                    </Button>
+                                    <Button className="btn-warning float-right">
                                     <Link to={"/profile/"+user.uid}>More</Link>
+                                    </Button>
                             </CardBody>
                         </UserCard>
                     </Col>

@@ -9,9 +9,12 @@ class ReviewForm extends Component {
     
 handleSubmit = event => {
     const {rating,comment} = this.state
-    this.props.firebase.review(this.props.uid).set({
+    const authUser = JSON.parse(localStorage.getItem('authUser'))
+    this.props.firebase.review(this.props.uid).push({
         rating,
-        comment
+        comment,
+        date : new Date(),
+        author : authUser.uid
     })
 }
 

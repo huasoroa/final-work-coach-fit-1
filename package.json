@@ -17,6 +17,7 @@
     "react": "^16.8.4",
     "react-bell-chat": "^1.0.23",
     "react-chartjs-2": "^2.7.4",
+    "react-chat": "0.0.1-alpha1",
     "react-chat-elements": "^10.8.0",
     "react-chat-widget": "^3.0.2",
     "react-component-queries": "^2.3.0",
@@ -32,6 +33,7 @@
     "react-sizeme": "^2.5.2",
     "reactstrap": "^7.1.0",
     "recompose": "^0.30.0",
+    "stream-chat-react": "^2.2.1",
     "victory": "^32.0.0"
   },
   "devDependencies": {

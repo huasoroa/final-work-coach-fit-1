@@ -10,53 +10,83 @@ export default class ClientOverviewPage extends Component {
     }
 
     componentDidMount = () => {
-        this.props.firebase.bookingMembers().orderByChild(authUser.uid).equalTo(true).on('value', snapshot => {
-            const bookingObjects = snapshot.val();
-            if(bookingObjects!== null) {
-                let members = []
-                let uids= []
-                let bookingList = null;
-                bookingObjects.map( obj => {
-                  
-                })
-                Object.keys(bookingObjects).forEach(key => {
-                  Object.keys(bookingObjects[key]).map(mKey => {
-                    members.push(mKey);
-                    console.log('mKey: '+mKey)
-                  }) 
-                  console.log('key: '+key)
-                  uids.push(key)
-                });
-                console.log('Booking')
-                console.log(bookingList)
-                let formatBookingList=[];
-                uids.forEach(obj => {
-                  this.props.firebase.booking(obj).on('value', snapshot => {
-                    const bookingData= snapshot.val();
-                    let timeNow = new Date()
-                    console.log(bookingData);
-                    if(bookingData.date.getTime() > timeNow.getTime()){
-                        formatBookingList.push(bookingData);
+
+      this.setState({loading:true})
+
+      const authUser = JSON.parse(localStorage.getItem('authUser'))
+       
+      this.props.firebase.bookingMembers()
+      .orderByChild(authUser.uid).equalTo(true).on('value',snapshot => {
+        const bookingObjects = snapshot.val();
+        if (bookingObjects!== null) {
+          console.log("For ... in Loop")
+          for (const key in bookingObjects) {
+            if (bookingObjects.hasOwnProperty(key)) {
+  
+              const membersUid = bookingObjects[key];
+  
+              let membersInformation = []
+              this.props.firebase.booking(key).on('value', snapshot => {
+                const bookingMetadata = snapshot.val();
+                let timeNow = new Date()
+                console.log(bookingMetadata);
+                const bookingTime = new Date(bookingMetadata.date)
+                console.log(bookingTime)
+                if (bookingTime.getTime() > timeNow.getTime() || this.state.bookings.length > 4 ) {
+                  console.log('It got through Bruv')
+                  for (const uid in membersUid) {
+                    if (membersUid.hasOwnProperty(uid)) {
+                      const element = membersUid[uid];
+      
+                      this.props.firebase.user(uid).on('value',snapshot => {
+                        const userObject = snapshot.val();
+                        const userAdapter = { firstName : userObject.firstName,
+                                              lastName : userObject.lastName,
+                                              username : userObject.username,
+                          }
+                          membersInformation.push(userAdapter)
+                      })
+      
                     }
-                  })
-                });
-                console.log("FormatBookingList == ")
-                console.log(formatBookingList)
-                let membersList = []
-                members.forEach(obj => {
-                  this.props.firebase.user(obj).on('value', snaphot => {
-                    const user = snapshot.val()
-                    membersList.push(user)
-                  })
-                })
-                
-                this.setState({bookings: formatBookingList})      
-                this.setState({loading:false})
-            }else {
-                this.setState({loading: false})
+                  }
+                  const bookingAdapter = {date : bookingMetadata.date,
+                                          startTime: bookingMetadata.startTime,
+                                          endTime: bookingMetadata.endTime,
+                  }
+                  const bookingObject = { membersInformation,
+                                          bookingInformation: bookingAdapter            
+                  }
+                  console.log(bookingObject)
+                  this.setState(prevState => ({
+                    bookings : [...prevState.bookings, bookingObject]
+                  }))
+                }
+              })
+  
             }
-        })
+          }
+
+          this.props.firebase.reviews(authUser.uid).on('value',snapshot => {
+            const reviewsObjects = snapshot.val()
+            if (reviewsObjects !== null) {
+              this.setState({reviews: reviewsObjects})
+            }
+          })
+
+          this.setState({loading:false})
+        } else {
+          this.setState({loading : false})
+        }
+      })
+    
     }
+    componentWillUnmount=() => {
+      this.props.firebase.users().off()
+      this.props.firebase.bookings().off()
+      this.props.firebase.bookingMembers().off()
+      this.props.firebase.reviews().off()
+    }
+  
 
     render() {
         return (
@@ -65,6 +95,7 @@ export default class ClientOverviewPage extends Component {
                     <Col>Reviews
                     {loading && (<div>Loading .....</div>)}
                     
+
                     </Col>
                     <Col>Upcoming Clients
                     {loading && (<div>Loading .....</div>)}
