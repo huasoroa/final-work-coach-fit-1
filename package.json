@@ -33,7 +33,7 @@
     "react-sizeme": "^2.5.2",
     "reactstrap": "^7.1.0",
     "recompose": "^0.30.0",
-    "stream-chat-react": "^2.2.1",
+    "stream-chat-react": "^10.4.3",
     "victory": "^32.0.0"
   },
   "devDependencies": {
